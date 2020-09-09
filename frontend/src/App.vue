@@ -1,8 +1,16 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
+    <AppNavigationDrawer v-model="drawer" />
+
+    <v-app-bar fixed app color="primary" dark>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title class="white--text">Clipboard</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
       <div class="d-flex align-center">
         <v-img
+          :to="{ name: 'Home' }"
           alt="Vuetify Logo"
           class="shrink mr-2"
           contain
@@ -23,34 +31,42 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+      <v-btn text :loading="false" @click="onCreate"> <!-- TODO: eliminar comentario :to="{ name: 'clipboard' }" -->
+        <v-icon>mdi-clipboard-text-outline</v-icon>
+        <span class="mr-2">New</span>
       </v-btn>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld />
+      <router-view>
+        <Home />
+      </router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import Home from "./views/Home";
+import AppNavigationDrawer from "./components/AppNavigationDrawer";
+import ClipboardService from "./services/ClipboardService";
 
 export default {
   name: "App",
 
   components: {
-    HelloWorld
+    Home,
+    AppNavigationDrawer
   },
 
   data: () => ({
-    //
-  })
+    drawer: true
+  }),
+
+  methods: {
+    onCreate() {
+      let clipboard = ClipboardService.create();
+      this.$router.push({ name: 'clipboard', params: { uuid: clipboard.uuid, text: clipboard.text } });
+    }
+  }
 };
 </script>
