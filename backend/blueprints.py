@@ -7,16 +7,20 @@ from businesslogic import generate_uuid
 clip = Blueprint('clip', __name__)
 
 
-@clip.route('/save', methods=['POST'])
-def save():
-
-    json_data = request.get_json()
-    text = json_data["clipboard"]["text"]
+@clip.route('/create', methods=['POST'])
+def create():
+    text = ""
 
     return {
         "uuid": generate_uuid(),
         "text": text
     }
+
+@clip.route('/save', methods=['POST'])
+def save():
+
+    json_data = request.get_json()
+    return json_data
 
 @clip.route('/fetch/<string:suuid>')
 def fetch(suuid):
@@ -30,3 +34,8 @@ def fetch_post():
     json_data = request.get_json()
     uuid = json_data["uuid"]
     return fetch(uuid)
+
+@clip.route('/delete', methods=['POST'])
+def delete():
+    json_data = request.get_json()
+    return json_data

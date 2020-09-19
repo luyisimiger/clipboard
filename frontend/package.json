@@ -11,10 +11,12 @@
     "@mdi/font": "^3.6.95",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "fingerprintjs2": "^2.1.2",
     "roboto-fontface": "*",
     "short-unique-id": "^3.0.4",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vue-sse": "^1.0.2",
     "vuetify": "^2.2.11",
     "vuex": "^3.4.0"
   },

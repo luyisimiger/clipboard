@@ -31,7 +31,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn text :loading="false" @click="onCreate"> <!-- TODO: eliminar comentario :to="{ name: 'clipboard' }" -->
+      <v-btn text :loading="loading" @click="onCreate">
         <v-icon>mdi-clipboard-text-outline</v-icon>
         <span class="mr-2">New</span>
       </v-btn>
@@ -48,7 +48,7 @@
 <script>
 import Home from "./views/Home";
 import AppNavigationDrawer from "./components/AppNavigationDrawer";
-import ClipboardService from "./services/ClipboardService";
+import service from "./services/ClipboardService";
 
 export default {
   name: "App",
@@ -59,13 +59,29 @@ export default {
   },
 
   data: () => ({
-    drawer: true
+    drawer: true,
+    loading: false
   }),
 
   methods: {
     onCreate() {
-      let clipboard = ClipboardService.create();
-      this.$router.push({ name: 'clipboard', params: { uuid: clipboard.uuid, text: clipboard.text } });
+      let that = this;
+      this.loading = true;
+      service
+        .create()
+        .then(response => {
+          that.$router.push({
+            name: "clipboard",
+            params: {
+              uuid: response.data.uuid,
+              text: response.data.text
+            }
+          });
+        })
+        .catch(() => {
+          // codigo aqui
+        })
+        .then(() => (that.loading = false));
     }
   }
 };

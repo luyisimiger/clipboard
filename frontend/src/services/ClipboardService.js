@@ -1,40 +1,38 @@
-import ShortUniqueId from "short-unique-id";
-//import api from ".";
+import api from ".";
 
-//const path = "/sync";
-
-const options = {
-  length: 3
-};
-
-const uid = new ShortUniqueId(options);
+const path = "/clip";
 
 const key = uuid => {
-  return `clipboard:${uuid}`
-}
+  return `clipboard:${uuid}`;
+};
 
 export default {
   create() {
-    let clipboard = {
-      uuid: uid(),
-      text: ""
-    }
-    return clipboard;
+    let url = `${path}/create`;
+    return api.post(url);
   },
 
   key,
 
-  synchronize(clipboard) {
-    let mykey = key(clipboard.uuid);
-    //return api.post(url, clipboard);
-    localStorage.setItem(mykey, JSON.stringify(clipboard));
-    return new Promise((resolve /*, reject*/) => resolve(clipboard));
+  save(payload) {
+    let url = `${path}/save`;
+    return api.post(url, payload);
+    //let mykey = key(clipboard.uuid);
+    //localStorage.setItem(mykey, JSON.stringify(clipboard));
+    //return new Promise((resolve /*, reject*/) => resolve(clipboard));
   },
 
   fetch(uuid) {
-    let mykey = key(uuid);
-    let clipboard = JSON.parse(localStorage.getItem(mykey));
+    let url = `${path}/fetch`;
+    return api.post(url, { uuid });
+    //let mykey = key(uuid);
+    //let clipboard = JSON.parse(localStorage.getItem(mykey));
     //localStorage.removeItem(mykey);
-    return new Promise((resolve /*, reject*/) => resolve(clipboard));
+    //return new Promise((resolve /*, reject*/) => resolve(clipboard));
+  },
+
+  delete(uuid) {
+    let url = `${path}/delete`;
+    return api.post(url, { uuid });
   }
-}
+};
