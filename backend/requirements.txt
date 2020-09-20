@@ -1,2 +1,9 @@
 Flask==1.1.1
+Flask-Cors==3.0.8
+Flask-Migrate==2.0.2
+Flask-Script==2.0.5
+
+gunicorn==19.9.0
+psycopg2==2.8.2
+python-dotenv==0.10.1
 shortuuid==1.0.1

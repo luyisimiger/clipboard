@@ -5,7 +5,7 @@ from flask_sse import sse
 from redis import Redis
 
 from blueprints import clip
-from extensions import cors
+from extensions import cors, db
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -13,6 +13,8 @@ app.config.from_object('config')
 
 # load extensions
 cors.init_app(app)
+db.init_app(app)
+
 
 # register blueprint's
 app.register_blueprint(clip, url_prefix='/clip')
