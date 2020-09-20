@@ -4,7 +4,9 @@
 
     <v-app-bar fixed app color="primary" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title class="white--text">Clipboard</v-toolbar-title>
+      <v-toolbar-title class="white--text">
+        <v-btn text :to="{ name: 'Home'}">Clipboard</v-btn>
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
