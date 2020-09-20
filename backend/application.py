@@ -1,8 +1,6 @@
 
 from flask import Flask, request
 from flask_cors import CORS
-from flask_sse import sse
-from redis import Redis
 
 from blueprints import clip
 from extensions import cors, db

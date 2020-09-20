@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, request
-from flask_sse import sse
 
 from businesslogic import generate_uuid
 from extensions import db
