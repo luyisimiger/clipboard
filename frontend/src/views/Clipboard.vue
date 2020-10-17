@@ -45,7 +45,12 @@ export default {
 
   props: {
     uuid: String,
-    text: String
+    text: String,
+    require_fetch: {
+      type: Boolean,
+      default: true,
+      required: false
+    }
   },
 
   data() {
@@ -120,6 +125,7 @@ export default {
       });
     }
   },
+
 
   beforeDestroy() {
     // Make sure to close the connection with the events server
