@@ -1,5 +1,5 @@
 """
-run.py
+app.py
 - creates an application instance and runs the dev server
 """
 import env
