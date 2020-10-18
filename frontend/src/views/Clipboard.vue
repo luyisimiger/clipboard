@@ -58,6 +58,7 @@ export default {
       fab: false,
       browserfingerprint: "",
       synchronizing: false,
+      xrequire_fetch: this.require_fetch,
       clipboard: {
         uuid: this.uuid,
         text: this.text
@@ -87,10 +88,16 @@ export default {
     //  }
     //});
 
-    this.fetch(this.uuid);
+    this.dofetch();
   },
 
   methods: {
+
+    dofetch() {
+      if (this.xrequire_fetch)
+        this.fetch();
+    },
+
     fetch() {
       service.fetch(this.uuid).then(response => {
         if (response.data != null) {
@@ -126,6 +133,15 @@ export default {
     }
   },
 
+  watch: {
+    '$route': function(a) {
+      this.uuid = a.params.uuid;
+      this.xrequire_fetch = a.params.require_fetch;
+      this.xrequire_fetch = this.xrequire_fetch === undefined ? true : this.xrequire_fetch;
+      
+      this.dofetch();
+    }
+  },
 
   beforeDestroy() {
     // Make sure to close the connection with the events server
