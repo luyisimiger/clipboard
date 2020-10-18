@@ -4,4 +4,4 @@ clipboard
 
 # For run project
 
-python3 run.py
+python3 app.py

@@ -5,7 +5,7 @@
     <v-app-bar fixed app color="primary" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="white--text">
-        <v-btn text :to="{ name: 'Home'}">Clipboard</v-btn>
+        <v-btn text :to="{ name: 'Home' }">Clipboard</v-btn>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -44,6 +44,19 @@
         <Home />
       </router-view>
     </v-main>
+
+    <v-footer dark padless>
+      <v-card class="flex" flat tile>
+        <v-card-text class="py-2 white--text text-center">
+          {{ new Date().getFullYear() }} —
+          <strong>
+            Made with
+            <v-icon color="red">mdi-heart</v-icon>from
+          </strong>
+          <span title="Colombia">🇨🇴</span>
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 
@@ -61,7 +74,7 @@ export default {
   },
 
   data: () => ({
-    drawer: true,
+    drawer: false,
     loading: false
   }),
 
@@ -76,7 +89,8 @@ export default {
             name: "clipboard",
             params: {
               uuid: response.data.uuid,
-              text: response.data.text
+              text: response.data.text,
+              require_fetch: false
             }
           });
         })

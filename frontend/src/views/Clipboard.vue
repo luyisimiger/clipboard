@@ -45,7 +45,12 @@ export default {
 
   props: {
     uuid: String,
-    text: String
+    text: String,
+    require_fetch: {
+      type: Boolean,
+      default: true,
+      required: false
+    }
   },
 
   data() {
@@ -53,6 +58,7 @@ export default {
       fab: false,
       browserfingerprint: "",
       synchronizing: false,
+      xrequire_fetch: this.require_fetch,
       clipboard: {
         uuid: this.uuid,
         text: this.text
@@ -82,10 +88,16 @@ export default {
     //  }
     //});
 
-    this.fetch(this.uuid);
+    this.dofetch();
   },
 
   methods: {
+
+    dofetch() {
+      if (this.xrequire_fetch)
+        this.fetch();
+    },
+
     fetch() {
       service.fetch(this.uuid).then(response => {
         if (response.data != null) {
@@ -118,6 +130,16 @@ export default {
       service.delete(this.uuid).then(() => {
         // router navigation
       });
+    }
+  },
+
+  watch: {
+    '$route': function(a) {
+      this.uuid = a.params.uuid;
+      this.xrequire_fetch = a.params.require_fetch;
+      this.xrequire_fetch = this.xrequire_fetch === undefined ? true : this.xrequire_fetch;
+      
+      this.dofetch();
     }
   },
 
