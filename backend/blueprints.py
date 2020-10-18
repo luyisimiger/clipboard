@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 
-from businesslogic import generate_uuid
+from businesslogic import generate_uuid, clip_fetch_expired
 from extensions import db
 from models import Clipboard
+from schemas import ClipboardSchema
 
 
 clip = Blueprint('clip', __name__)
@@ -61,6 +62,32 @@ def fetch_post():
     
     return fetch(uuid)
 
+@clip.route('/fetch/expired', methods=['GET', 'POST'])
+def fetch_expired():
+    
+    # Get list of expired clipboards
+    ahora = datetime.now()
+    all_instances = clip_fetch_expired(ahora)
+    
+    # Serialize the data for the response
+    schema = ClipboardSchema(many=True)
+    data = schema.dump(all_instances)
+    
+    return jsonify(data)
+
+@clip.route('/fetch/expire-incoming', methods=['GET', 'POST'])
+def fetch_expire_incoming():
+    
+    # Get list of expired clipboards
+    ahora = datetime.now()
+    all_instances = Clipboard.query.filter(Clipboard.expire>ahora)
+    
+    # Serialize the data for the response
+    schema = ClipboardSchema(many=True)
+    data = schema.dump(all_instances)
+    
+    return jsonify(data)
+
 @clip.route('/delete', methods=['POST'])
 def delete():
     # get uuid
@@ -72,6 +99,24 @@ def delete():
     
     # delete clip
     db.session.delete(clip)
+    db.session.commit()
+
+    return json_data
+
+@clip.route('/delete/expired', methods=['GET', 'POST'])
+def delete_expired():
+    
+    # Get list of expired clipboards
+    ahora = datetime.now()
+    all_instances = clip_fetch_expired(ahora)
+    
+    # Serialize the data for the response
+    schema = ClipboardSchema(many=True)
+    data = schema.dump(all_instances)
+    json_data = jsonify(data)
+
+    # delete clips
+    all_instances.delete()
     db.session.commit()
 
     return json_data
