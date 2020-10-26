@@ -33,7 +33,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn text :loading="loading" @click="onCreate">
+      <v-btn id="btn-new" text :loading="loading" @click="onCreate">
         <v-icon>mdi-clipboard-text-outline</v-icon>
         <span class="mr-2">New</span>
       </v-btn>
