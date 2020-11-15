@@ -1,7 +1,6 @@
 import axios from "axios";
 // import { auth_token } from "@/util/functions";
 
-
 /* create axios instance */
 const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -11,7 +10,6 @@ const api = axios.create({
     "Content-Type": "application/json"
   }
 });
-
 
 /* config axios instance */
 api.interceptors.request.use(

@@ -85,12 +85,16 @@ export default {
       service
         .create()
         .then(response => {
-          that.$router.push({
-            name: "clipboard",
+          // set data fetched
+          let clipboard = response.data;
+          
+          // route navigation
+          this.$router.replace({
+            name: "edit-clipboard",
             params: {
-              uuid: response.data.uuid,
-              text: response.data.text,
-              require_fetch: false
+              uuid: clipboard.uuid,
+              clipboardObject: clipboard,
+              fetch: false
             }
           });
         })

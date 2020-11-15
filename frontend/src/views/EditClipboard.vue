@@ -1,52 +1,29 @@
 <template>
-  <v-card id="clipboard" flat>
-    <v-container>
-      <v-textarea
-        v-model="clipboard.text"
-        class="font-monaco"
-        name="clip"
-        placeholder="The clipboard text"
-        solo
-        flat
-        auto-grow
-        @input="onClipInput"
-        >{{ text }}</v-textarea
-      >
-    </v-container>
-    <v-speed-dial
-      v-model="fab"
-      right
-      top
-      open-on-hover
-      direction="bottom"
-      transition="slide-y-reverse-transition"
-    >
-      <template v-slot:activator>
-        <v-btn v-model="fab" color="blue darken-2" dark fab>
-          <v-icon v-if="fab">mdi-close</v-icon>
-          <v-icon v-else>mdi-clipboard</v-icon>
-        </v-btn>
-      </template>
-      <v-btn fab dark small color="green" @click="onSave">
-        <v-icon>mdi-content-save-outline</v-icon>
-      </v-btn>
-      <v-btn fab dark small color="red" @click="onDelete">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </v-speed-dial>
-  </v-card>
+  <Clipboard :clipboard-object="clipboard" @save="onSave" />
 </template>
 
 <script>
 import service from "../services/ClipboardService";
+import Clipboard from "../components/Clipboard";
 
 export default {
-  name: "Clipboard",
+  name: "EditClipboard",
+  components: {
+    Clipboard
+  },
 
   props: {
-    uuid: String,
-    text: String,
-    require_fetch: {
+    clipboardObject: {
+      type: Object,
+      default: () => undefined,
+      required: false
+    },
+    uuid: {
+      type: String,
+      default: "",
+      required: false
+    },
+    fetch: {
       type: Boolean,
       default: true,
       required: false
@@ -58,15 +35,13 @@ export default {
       fab: false,
       browserfingerprint: "",
       synchronizing: false,
-      xrequire_fetch: this.require_fetch,
-      clipboard: {
-        uuid: this.uuid,
-        text: this.text
-      }
+      xfetch: this.fetch,
+      clipboard: this.clipboardObject || { uuid: this.uuid, text: "" }
     };
   },
 
   created() {
+    // get browser unique id
     this.$fingerprint.get(components => {
       this.browserfingerprint = this.$fingerprint.x64hash128(
         components
@@ -77,6 +52,19 @@ export default {
         31
       );
     });
+
+    /*// API create a new clip
+    service.create().then(response => {
+      this.clipboard = response.data;
+      this.$router.replace({
+        name: "clipboard",
+        params: {
+          uuid: response.data.uuid,
+          text: response.data.text,
+          fetch: false
+        }
+      });
+    });*/
   },
 
   mounted() {
@@ -92,22 +80,14 @@ export default {
   },
 
   methods: {
-
     dofetch() {
-      if (this.xrequire_fetch)
-        this.fetch();
-    },
-
-    fetch() {
-      service.fetch(this.uuid).then(response => {
-        if (response.data != null) {
-          this.clipboard = response.data;
-        }
-      });
-    },
-
-    onClipInput() {
-      // Se llama cada vez que se tipea en el textarea
+      if (this.xfetch) {
+        service.fetch(this.uuid).then(response => {
+          if (response.data != null) {
+            this.clipboard = response.data;
+          }
+        });
+      }
     },
 
     onSave() {
@@ -134,11 +114,11 @@ export default {
   },
 
   watch: {
-    '$route': function(a) {
+    $route: function(a) {
       this.uuid = a.params.uuid;
-      this.xrequire_fetch = a.params.require_fetch;
-      this.xrequire_fetch = this.xrequire_fetch === undefined ? true : this.xrequire_fetch;
-      
+      this.xfetch = a.params.fetch;
+      this.xfetch = this.xfetch === undefined ? true : this.xfetch;
+
       this.dofetch();
     }
   },
