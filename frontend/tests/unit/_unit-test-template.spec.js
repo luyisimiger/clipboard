@@ -13,15 +13,7 @@ const vm = wrapper.vm;
 
 
 describe('Nombre del set de pruebas', () => {
-  // aqui van las pruebas
-});
-
-describe('Nombre del set de pruebas II', () => {
 	test('Nombre de la prueba', ()  => {
-    // aqui va el codigo de la prueba
-  });
-
-  test('Nombre de la prueba II', ()  => {
     expect(1).toBe(1);
   });
 }); 

@@ -87,7 +87,6 @@ export default {
         .then(response => {
           // set data fetched
           let clipboard = response.data;
-          
           // route navigation
           this.$router.replace({
             name: "edit-clipboard",

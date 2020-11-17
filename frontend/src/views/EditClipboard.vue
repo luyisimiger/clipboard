@@ -52,30 +52,9 @@ export default {
         31
       );
     });
-
-    /*// API create a new clip
-    service.create().then(response => {
-      this.clipboard = response.data;
-      this.$router.replace({
-        name: "clipboard",
-        params: {
-          uuid: response.data.uuid,
-          text: response.data.text,
-          fetch: false
-        }
-      });
-    });*/
   },
 
   mounted() {
-    //let that = this;
-    //let mykey = service.key(this.clipboard.uuid);
-    //window.addEventListener("storage", event => {
-    //  if (event.key == mykey) {
-    //    that.clipboard = JSON.parse(event.newValue);
-    //  }
-    //});
-
     this.dofetch();
   },
 
@@ -100,7 +79,7 @@ export default {
         this.synchronizing = true;
         service
           .save(payload)
-          .then(() => console.log("save"))
+          .then(() => {})
           .catch(error => console.log(error))
           .then(() => (this.synchronizing = false));
       }
@@ -113,27 +92,20 @@ export default {
     }
   },
 
-  watch: {
-    $route: function(a) {
-      this.uuid = a.params.uuid;
-      this.xfetch = a.params.fetch;
-      this.xfetch = this.xfetch === undefined ? true : this.xfetch;
-
-      this.dofetch();
-    }
-  },
-
-  beforeDestroy() {
-    // Make sure to close the connection with the events server
-    // when the component is destroyed, or we'll have ghost connections!
-  },
+  watch: {},
 
   beforeRouteUpdate(to, from, next) {
     let clip = {
       uuid: to.params.uuid,
       text: to.params.text
     };
+
+    this.uuid = to.params.uuid;
+    this.xfetch = to.params.fetch;
+    this.xfetch = this.xfetch === undefined ? true : this.xfetch;
     this.clipboard = clip;
+
+    this.dofetch();
     next();
   }
 };

@@ -27,7 +27,6 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "clipboard" */ "../views/EditClipboard.vue"),
-    
     props: true
   }
 ];
